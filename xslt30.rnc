@@ -1,3 +1,4 @@
+
 # XSLT 3.0 Relax NG Schema
 # Copyright (c) 2010-2012, Mohamed ZERGAOUI (Innovimax)
 # All rights reserved.
@@ -5,16 +6,15 @@
 # Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 # Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 # Neither the name of the Mohamed ZERGAOUI or Innovimax nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS 
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
 # FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 # (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
 # STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
 namespace local = ""
 default namespace xsl = "http://www.w3.org/1999/XSL/Transform"
 namespace xs = "http://www.w3.org/2001/XMLSchema"
 
-start = 
+start =
   stylesheet.element
   | transform.element
   | literal-result-element-as-stylesheet
@@ -161,6 +161,7 @@ instruction.category =
  | analyze-string.element
  | stream.element
  | message.element
+ | assert.element
  | fallback.element
  | result-document.element
 package.element =
@@ -486,6 +487,7 @@ element.element =
       attribute use-attribute-sets { eqnames.datatype }?,
       attribute type { eqname.datatype }?,
       attribute validation { "strict" | "lax" | "preserve" | "strip" }?,
+      attribute on-empty { expression.datatype }?,
       sequence-constructor.model
    }
 attribute.element =
@@ -498,6 +500,7 @@ attribute.element =
       attribute separator { string.datatype | avt.datatype }?,
       attribute type { eqname.datatype }?,
       attribute validation { "strict" | "lax" | "preserve" | "strip" }?,
+      attribute on-empty { expression.datatype }?,
       sequence-constructor.model
    }
 text.element =
@@ -557,6 +560,7 @@ copy.element =
       attribute use-attribute-sets { eqnames.datatype }?,
       attribute type { eqname.datatype }?,
       attribute validation { "strict" | "lax" | "preserve" | "strip" }?,
+      attribute on-empty { expression.datatype }?,
       sequence-constructor.model
    }
 copy-of.element =
@@ -633,6 +637,8 @@ merge.element =
    element merge {
       extension.atts,
       global.atts,
+      attribute bind-group { eqname.datatype }?,
+      attribute bind-key { eqname.datatype }?,
       (merge-source.element+, merge-action.element, fallback.element*)
    }
 merge-source.element =
@@ -641,7 +647,8 @@ merge-source.element =
       global.atts,
       attribute for-each { expression.datatype }?,
       attribute select { expression.datatype },
-      attribute name { ncname.datatype }?,
+      attribute bind-source { eqname.datatype }?,
+      attribute streamable { "yes" | "no" }?,
       attribute sort-before-merge { "yes" | "no" }?,
       merge-key.element+
    }
@@ -667,7 +674,7 @@ fork.element =
    element fork {
       extension.atts,
       global.atts,
-      (sequence-constructor.model)
+      ((sequence.element | fallback.element))+
    }
 analyze-string.element =
    element analyze-string {
@@ -750,6 +757,17 @@ message.element =
    element message {
       extension.atts,
       global.atts,
+      attribute select { expression.datatype }?,
+      attribute terminate { "yes" | "no" | avt.datatype }?,
+      attribute error-code { eqname.datatype | avt.datatype }?,
+      sequence-constructor.model
+   }
+assert.element =
+   element assert {
+      extension.atts,
+      global.atts,
+      attribute enabled { expression.datatype }?,
+      attribute test { expression.datatype },
       attribute select { expression.datatype }?,
       attribute terminate { "yes" | "no" | avt.datatype }?,
       attribute error-code { eqname.datatype | avt.datatype }?,
