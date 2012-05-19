@@ -1,4 +1,3 @@
-
 # XSLT 3.0 Relax NG Schema
 # Copyright (c) 2010-2012, Mohamed ZERGAOUI (Innovimax)
 # All rights reserved.
@@ -42,6 +41,7 @@ literal-result-element-no-version.atts =
  & attribute xsl:extension-element-prefixes { extension.prefixes.datatype }?
  & attribute xsl:xpath-default-namespace { xsd:anyURI }?
  & attribute xsl:default-collation { xsd:anyURI }?
+ & attribute xsl:on-empty { expression.datatype }?
  & attribute xsl:use-when { expression.datatype }?
  & attribute xsl:use-attribute-sets { qnames.datatype }?
  & (attribute xsl:type { xsd:QName }
