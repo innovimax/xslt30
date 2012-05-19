@@ -1,14 +1,19 @@
 # XSLT 3.0 Relax NG Schema
+# 
 # Copyright (c) 2010-2012, Mohamed ZERGAOUI (Innovimax)
+# 
 # All rights reserved.
+# 
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 # Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 # Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 # Neither the name of the Mohamed ZERGAOUI or Innovimax nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+# 
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
 # FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 # (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
 # STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# 
 namespace local = ""
 default namespace xsl = "http://www.w3.org/1999/XSL/Transform"
 namespace xs = "http://www.w3.org/2001/XMLSchema"
@@ -20,7 +25,7 @@ start =
 sequence-constructor.model = (instruction.category | literal-result-element | text)*
 literal-result-element-as-stylesheet =
   element * - xsl:* {
-    attribute xsl:version { number.datatype },
+    attribute xsl:version { decimal.datatype },
     literal-result-element-no-version.atts,
     sequence-constructor.model
   }
@@ -81,29 +86,24 @@ global.atts.except.version = attribute exclude-result-prefixes { exclude.prefixe
    attribute use-when { expression.datatype }?
 
 qname.datatype = xsd:QName
-eqname.datatype = text # TODO
+eqname.datatype = xsd:token # TODO make it more precise
 qnames.datatype = list { xsd:QName* }
-eqnames.datatype = list { xsd:string* }
+eqnames.datatype = list { xsd:token* } # TODO make it more precise
 ncname.datatype = xsd:NCName
-NCName.datatype = xsd:NCName
 prefix.datatype = xsd:NCName
 expression.datatype = text
 char.datatype = xsd:string { length = "1" }
 string.datatype = text
 id.datatype = xsd:NCName
-tokens.datatype = list { token* } #xsd:NMTOKENS #list { xsd:NCName* }
-prefixes.datatype = list { token* } #xsd:NMTOKENS #list { xsd:NCName* }
+tokens.datatype = list { token* }
+prefixes.datatype = list { token* }
 token.datatype = token
-language.datatype = token
+language.datatype = xsd:language
 nmtoken.datatype = xsd:NMTOKEN
 decimal.datatype = xsd:decimal
-number.datatype = xsd:decimal
 integer.datatype = xsd:integer
 uri.datatype = xsd:anyURI
-absolute-URI.datatype = xsd:anyURI
-uri-list.datatype = list { xsd:anyURI* }
 uris.datatype = list { xsd:anyURI* }
-version-pattern.datatype = text
 pattern.datatype = text
 qname-but-not-ncname.datatype = xsd:QName { pattern = ".*:.*" }
 xs_schema.element = element xs:schema { anyElement* }
