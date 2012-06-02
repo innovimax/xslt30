@@ -217,7 +217,7 @@ stylesheet.element =
       attribute default-collation { uris.datatype }?,
       attribute default-mode { eqname.datatype | "#unnamed" }?,
       attribute input-type-annotations { "preserve" | "strip" | "unspecified" }?,
-      (import.element*, other-declarations.model)
+      (use-package.element*, import.element*, other-declarations.model)
    }
 transform.element =
    element transform {
@@ -231,7 +231,7 @@ transform.element =
       attribute default-collation { uris.datatype }?,
       attribute default-mode { eqname.datatype | "#unnamed" }?,
       attribute input-type-annotations { "preserve" | "strip" | "unspecified" }?,
-      (import.element*, other-declarations.model)
+      (use-package.element*, import.element*, other-declarations.model)
    }
 include.element =
    element include {
@@ -276,7 +276,7 @@ template.element =
       attribute match { pattern.datatype }?,
       attribute name { eqname.datatype }?,
       attribute priority { decimal.datatype }?,
-      attribute mode { tokens.datatype }?,
+      attribute mode { list { '#all' | ('#default' | '#unnamed' | eqname.datatype)* } }?,
       attribute as { sequence-type.datatype }?,
       attribute visibility { "public" | "private" | "final" | "abstract" }?,
       (context-item.element?, param.element*, sequence-constructor.model)
@@ -286,7 +286,7 @@ apply-templates.element =
       extension.atts,
       global.atts,
       attribute select { expression.datatype }?,
-      attribute mode { token.datatype }?,
+      attribute mode { (eqname.datatype | '#unnamed' | '#default' | '#current') }?,
       (sort.element | with-param.element)*
    }
 mode.element =
@@ -577,7 +577,7 @@ sequence.element =
    element sequence {
       extension.atts,
       global.atts,
-      attribute select { expression.datatype },
+      attribute select { expression.datatype }?,
       sequence-constructor.model
    }
 number.element =
@@ -769,7 +769,6 @@ assert.element =
       attribute enabled { expression.datatype }?,
       attribute test { expression.datatype },
       attribute select { expression.datatype }?,
-      attribute terminate { "yes" | "no" | avt.datatype }?,
       attribute error-code { eqname.datatype | avt.datatype }?,
       sequence-constructor.model
    }
