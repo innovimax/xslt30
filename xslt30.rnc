@@ -19,7 +19,16 @@ default namespace xsl = "http://www.w3.org/1999/XSL/Transform"
 namespace xs = "http://www.w3.org/2001/XMLSchema"
 
 start =
-  stylesheet.element
+  element local:examples { 
+    attribute xsl:version { decimal.datatype },
+    literal-result-element-no-version.atts,
+    element local:example { attribute xsl:version { decimal.datatype },
+    literal-result-element-no-version.atts,
+    (declaration.category|
+    sequence-constructor.model|def|sort.element|merge-source.element)*
+ }+ }
+  
+def =  stylesheet.element
   | transform.element
   | literal-result-element-as-stylesheet
 sequence-constructor.model = (instruction.category | literal-result-element | text)*
@@ -160,6 +169,8 @@ instruction.category =
  | fork.element
  | analyze-string.element
  | stream.element
+ | map.element
+ | map-entry.element
  | message.element
  | assert.element
  | fallback.element
@@ -406,6 +417,7 @@ variable.element =
       attribute name { eqname.datatype },
       attribute select { expression.datatype }?,
       attribute as { sequence-type.datatype }?,
+      attribute static { "yes" | "no" }?,
       attribute visibility { "public" | "private" | "final" | "abstract" }?,
       sequence-constructor.model
    }
@@ -418,6 +430,7 @@ param.element =
       attribute as { sequence-type.datatype }?,
       attribute required { "yes" | "no" }?,
       attribute tunnel { "yes" | "no" }?,
+      attribute static { "yes" | "no" }?,
       attribute visibility { "public" | "private" | "final" | "abstract" }?,
       sequence-constructor.model
    }
@@ -454,6 +467,7 @@ function.element =
       attribute name { eqname.datatype },
       attribute as { sequence-type.datatype }?,
       attribute visibility { "public" | "private" | "final" | "abstract" }?,
+      attribute override-extension-function { "yes" | "no" }?,
       attribute override { "yes" | "no" }?,
       (param.element*, sequence-constructor.model)
    }
@@ -753,6 +767,21 @@ decimal-format.element =
       attribute pattern-separator { char.datatype }?,
       empty
    }
+map.element =
+   element map {
+      extension.atts,
+      global.atts,
+      attribute collation { uri.datatype | avt.datatype }?,
+      sequence-constructor.model
+   }
+map-entry.element =
+   element map-entry {
+      extension.atts,
+      global.atts,
+      attribute key { expression.datatype },
+      attribute select { expression.datatype }?,
+      sequence-constructor.model
+   }
 message.element =
    element message {
       extension.atts,
@@ -766,7 +795,6 @@ assert.element =
    element assert {
       extension.atts,
       global.atts,
-      attribute enabled { expression.datatype }?,
       attribute test { expression.datatype },
       attribute select { expression.datatype }?,
       attribute error-code { eqname.datatype | avt.datatype }?,
