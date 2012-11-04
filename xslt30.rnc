@@ -19,16 +19,7 @@ default namespace xsl = "http://www.w3.org/1999/XSL/Transform"
 namespace xs = "http://www.w3.org/2001/XMLSchema"
 
 start =
-  element local:examples { 
-    attribute xsl:version { decimal.datatype },
-    literal-result-element-no-version.atts,
-    element local:example { attribute xsl:version { decimal.datatype },
-    literal-result-element-no-version.atts,
-    (declaration.category|
-    sequence-constructor.model|def|sort.element|merge-source.element)*
- }+ }
-  
-def =  stylesheet.element
+  stylesheet.element
   | transform.element
   | literal-result-element-as-stylesheet
 sequence-constructor.model = (instruction.category | literal-result-element | text)*
