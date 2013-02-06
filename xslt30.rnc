@@ -1,6 +1,6 @@
 # XSLT 3.0 Relax NG Schema
 # 
-# Copyright (c) 2010-2012, Mohamed ZERGAOUI (Innovimax)
+# Copyright (c) 2010-2013, Mohamed ZERGAOUI (Innovimax)
 # 
 # All rights reserved.
 # 
@@ -170,9 +170,15 @@ package.element =
    element package {
       extension.atts,
       global.atts,
-      attribute xsl:version { decimal.datatype }?,
       attribute name { uri.datatype }?,
       attribute package-version { string.datatype }?,
+      attribute version { decimal.datatype },
+      attribute default-collation { uris.datatype }?,
+      attribute extension-element-prefixes { prefixes.datatype }?,
+      attribute exclude-result-prefixes { prefixes.datatype }?,
+      attribute expand-text { "yes" | "no" }?,
+      attribute use-when { expression.datatype }?,
+      attribute xpath-default-namespace { uri.datatype }?,
       (use-package.element*, (stylesheet.element | transform.element), expose.element*)
    }
 use-package.element =
@@ -211,29 +217,33 @@ stylesheet.element =
    element stylesheet {
       extension.atts,
       attribute id { id.datatype }?,
+      attribute version { decimal.datatype },
+      attribute default-mode { eqname.datatype | "#unnamed" }?,
+      attribute default-validation { "preserve" | "strip" }?,
+      attribute input-type-annotations { "preserve" | "strip" | "unspecified" }?,
+      attribute default-collation { uris.datatype }?,
       attribute extension-element-prefixes { prefixes.datatype }?,
       attribute exclude-result-prefixes { prefixes.datatype }?,
-      attribute version { decimal.datatype },
+      attribute expand-text { "yes" | "no" }?,
+      attribute use-when { expression.datatype }?,
       attribute xpath-default-namespace { uri.datatype }?,
-      attribute default-validation { "preserve" | "strip" }?,
-      attribute default-collation { uris.datatype }?,
-      attribute default-mode { eqname.datatype | "#unnamed" }?,
-      attribute input-type-annotations { "preserve" | "strip" | "unspecified" }?,
-      (use-package.element*, import.element*, other-declarations.model)
+      (use-package.element*, other-declarations.model)
    }
 transform.element =
    element transform {
       extension.atts,
       attribute id { id.datatype }?,
+      attribute version { decimal.datatype },
+      attribute default-mode { eqname.datatype | "#unnamed" }?,
+      attribute default-validation { "preserve" | "strip" }?,
+      attribute input-type-annotations { "preserve" | "strip" | "unspecified" }?,
+      attribute default-collation { uris.datatype }?,
       attribute extension-element-prefixes { prefixes.datatype }?,
       attribute exclude-result-prefixes { prefixes.datatype }?,
-      attribute version { decimal.datatype },
+      attribute expand-text { "yes" | "no" }?,
+      attribute use-when { expression.datatype }?,
       attribute xpath-default-namespace { uri.datatype }?,
-      attribute default-validation { "preserve" | "strip" }?,
-      attribute default-collation { uris.datatype }?,
-      attribute default-mode { eqname.datatype | "#unnamed" }?,
-      attribute input-type-annotations { "preserve" | "strip" | "unspecified" }?,
-      (use-package.element*, import.element*, other-declarations.model)
+      (use-package.element*, other-declarations.model)
    }
 include.element =
    element include {
@@ -460,6 +470,8 @@ function.element =
       attribute visibility { "public" | "private" | "final" | "abstract" }?,
       attribute override-extension-function { "yes" | "no" }?,
       attribute override { "yes" | "no" }?,
+      attribute identity-sensitive { "yes" | "no" }?,
+      attribute cache { "full" | "partial" | "no" }?,
       (param.element*, sequence-constructor.model)
    }
 evaluate.element =
@@ -469,6 +481,7 @@ evaluate.element =
       attribute xpath { expression.datatype },
       attribute as { sequence-type.datatype }?,
       attribute base-uri { uri.datatype | avt.datatype }?,
+      attribute with-params { expression.datatype }?,
       attribute context-item { expression.datatype }?,
       attribute namespace-context { expression.datatype }?,
       attribute schema-aware { "yes" | "no" | avt.datatype }?,
@@ -812,6 +825,7 @@ result-document.element =
       attribute doctype-system { string.datatype | avt.datatype }?,
       attribute encoding { string.datatype | avt.datatype }?,
       attribute escape-uri-attributes { "yes" | "no" | avt.datatype }?,
+      attribute html-version { decimal.datatype | avt.datatype }?,
       attribute include-content-type { "yes" | "no" | avt.datatype }?,
       attribute indent { "yes" | "no" | avt.datatype }?,
       attribute media-type { string.datatype | avt.datatype }?,
@@ -836,6 +850,7 @@ output.element =
       attribute doctype-system { string.datatype }?,
       attribute encoding { string.datatype }?,
       attribute escape-uri-attributes { "yes" | "no" }?,
+      attribute html-version { decimal.datatype }?,
       attribute include-content-type { "yes" | "no" }?,
       attribute indent { "yes" | "no" }?,
       attribute media-type { string.datatype }?,
