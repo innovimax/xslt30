@@ -22,7 +22,9 @@ start =
   stylesheet.element
   | transform.element
   | literal-result-element-as-stylesheet
+  
 sequence-constructor.model = (instruction.category | literal-result-element | text)*
+
 literal-result-element-as-stylesheet =
   element * - xsl:* {
     attribute xsl:version { decimal.datatype },
@@ -40,21 +42,27 @@ literal-result-element.atts =
   literal-result-element-no-version.atts,
   attribute xsl:version { text }?
 
+# These attributes may also appear on a literal result element, but in this case, to distinguish them from user-defined attributes, 
+# the names of the attributes are in the XSLT namespace. They are thus typically written as 
+# xsl:default-collation, 
+# xsl:exclude-result-prefixes, 
+# xsl:expand-text, 
+# xsl:extension-element-prefixes, 
+# xsl:use-when, 
+# xsl:version, 
+# or xsl:xpath-default-namespace.   
 literal-result-element-no-version.atts =
    attribute * - xsl:* { avt.datatype }*
- & attribute xsl:exclude-result-prefixes { exclude.prefixes.datatype }?
- & attribute xsl:extension-element-prefixes { extension.prefixes.datatype }?
- & attribute xsl:xpath-default-namespace { xsd:anyURI }?
- & attribute xsl:default-collation { xsd:anyURI }?
+ & attribute xsl:default-collation { uris.datatype }?
+ & attribute xsl:exclude-result-prefixes { exclude.prefixes.datatype }? # or prefixes.datatype ?
+ & attribute xsl:expand-text { "yes" | "no" }?
+ & attribute xsl:extension-element-prefixes { extension.prefixes.datatype }? # or prefixes.datatype ?
  & attribute xsl:on-empty { expression.datatype }?
+ & attribute xsl:use-attribute-sets { eqnames.datatype }?
  & attribute xsl:use-when { expression.datatype }?
- & attribute xsl:use-attribute-sets { qnames.datatype }?
- & (attribute xsl:type { xsd:QName }
+ & attribute xsl:xpath-default-namespace { xsd:anyURI }?
+ & (attribute xsl:type { eqname.datatype }
     | attribute xsl:validation { "strict" | "lax" | "preserve" | "strip" })?
-    
-extension.prefixes.datatype = list { xsd:NCName* }
-exclude.prefixes.datatype = list { "#all" | (xsd:NCName | "#default")* }
-other-declarations.model = (declaration.category | top-level-extension)*
 
 top-level-extension =
   element * - (xsl:* | local:*) {
@@ -72,23 +80,44 @@ anyElement =
     
 extension.atts = attribute * - (xsl:* | local:*) { text }*
 
-global.atts = attribute version { text }?,
-   attribute exclude-result-prefixes { exclude.prefixes.datatype }?,
-   attribute extension-element-prefixes { extension.prefixes.datatype }?,
-   attribute xpath-default-namespace { xsd:anyURI }?,
-   attribute default-collation { text }?,
-   attribute use-when { expression.datatype }?
+other-declarations.model = (declaration.category | top-level-extension)*
 
-global.atts.except.version = attribute exclude-result-prefixes { exclude.prefixes.datatype }?,
-   attribute extension-element-prefixes { extension.prefixes.datatype }?,
-   attribute xpath-default-namespace { xsd:anyURI }?,
-   attribute default-collation { text }?,
-   attribute use-when { expression.datatype }?
+# [Definition: There are a number of standard attributes that may appear on any XSLT element: specifically 
+# default-collation, 
+# exclude-result-prefixes,
+# expand-text, 
+# extension-element-prefixes, 
+# use-when, 
+# version, 
+# and xpath-default-namespace.]
+
+global.atts = 
+   attribute default-collation { uris.datatype }?,
+   attribute exclude-result-prefixes { exclude.prefixes.datatype }?, # or prefixes.datatype ?
+   attribute expand-text { "yes" | "no" }?,
+   attribute extension-element-prefixes { extension.prefixes.datatype }?, # or prefixes.datatype ?
+   attribute use-when { expression.datatype }?,
+   attribute version { decimal.datatype }?,
+   attribute xpath-default-namespace { uri.datatype }?
+   
+
+global.atts.except.version = 
+   attribute default-collation { uris.datatype }?,
+   attribute exclude-result-prefixes { exclude.prefixes.datatype }?, # or prefixes.datatype ?
+   attribute expand-text { "yes" | "no" }?,
+   attribute extension-element-prefixes { extension.prefixes.datatype }?, # or prefixes.datatype ?
+   attribute use-when { expression.datatype }?,
+   attribute xpath-default-namespace { uri.datatype }?
 
 qname.datatype = xsd:QName
-eqname.datatype = xsd:token # TODO make it more precise
-qnames.datatype = list { xsd:QName* }
-eqnames.datatype = list { xsd:token* } # TODO make it more precise
+# Extract from XPath 3.0
+#[94]   EQName           ::= QName | URIQualifiedName
+#[104]  QName            ::= [http://www.w3.org/TR/REC-xml-names/#NT-QName]Names
+#[105]  NCName           ::= [http://www.w3.org/TR/REC-xml-names/#NT-NCName]Names
+#[99]   URIQualifiedName ::= BracedURILiteral NCName
+#[100]  BracedURILiteral ::= "Q" "{" [^{}]* "}"
+eqname.datatype = xsd:QName | xsd:token { pattern = "Q\{[^{}]*\}\i\c*" }qnames.datatype = list { qname.datatype* }
+eqnames.datatype = list { eqname.datatype* }
 ncname.datatype = xsd:NCName
 prefix.datatype = xsd:NCName
 expression.datatype = text
@@ -97,6 +126,8 @@ string.datatype = text
 id.datatype = xsd:NCName
 tokens.datatype = list { token* }
 prefixes.datatype = list { token* }
+extension.prefixes.datatype = list { xsd:NCName* }
+exclude.prefixes.datatype = list { "#all" | (xsd:NCName | "#default")* }
 token.datatype = token
 language.datatype = xsd:language
 nmtoken.datatype = xsd:NMTOKEN
