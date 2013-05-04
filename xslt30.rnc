@@ -193,7 +193,7 @@ expose.element =
    element expose {
       extension.atts,
       global.atts,
-      attribute component { "template" | "function" | "attribute-set" | "variable" | "mode" },
+      attribute component { "template" | "function" | "accumulator" | "attribute-set" | "variable" | "mode" },
       attribute names { tokens.datatype },
       attribute visibility { "public" | "private" | "final" | "abstract" },
       empty
@@ -202,16 +202,16 @@ accept.element =
    element accept {
       extension.atts,
       global.atts,
-      attribute component { "template" | "function" | "attribute-set" | "variable" | "mode" },
+      attribute component { "template" | "function" | "accumulator" | "attribute-set" | "variable" | "mode" },
       attribute names { tokens.datatype },
-      attribute visibility { "public" | "private" | "final" | "abstract" | "hidden" },
+      attribute visibility { "public" | "private" | "final" | "abstract" | "hidden" | "absent" },
       empty
    }
 override.element =
    element override {
       extension.atts,
       global.atts,
-      (template.element | function.element | variable.element | param.element | attribute-set.element)*
+      (template.element | function.element | accumulator.element | variable.element | param.element | attribute-set.element)*
    }
 stylesheet.element =
    element stylesheet {
@@ -719,7 +719,7 @@ accumulator.element =
    element accumulator {
       extension.atts,
       global.atts,
-      attribute name { eqname.datatype }?,
+      attribute name { eqname.datatype },
       attribute post-descent { eqname.datatype }?,
       attribute initial-value { expression.datatype }?,
       attribute as { sequence-type.datatype }?,
@@ -831,6 +831,7 @@ result-document.element =
       attribute media-type { string.datatype | avt.datatype }?,
       attribute normalization-form { "NFC" | "NFD" | "NFKC" | "NFKD" | "fully-normalized" | "none" | nmtoken.datatype | avt.datatype }?,
       attribute omit-xml-declaration { "yes" | "no" | avt.datatype }?,
+      attribute parameter-document { uri.datatype | avt.datatype }?,
       attribute standalone { "yes" | "no" | "omit" | avt.datatype }?,
       attribute suppress-indentation { eqnames.datatype | avt.datatype }?,
       attribute undeclare-prefixes { "yes" | "no" | avt.datatype }?,
@@ -855,6 +856,7 @@ output.element =
       attribute indent { "yes" | "no" }?,
       attribute media-type { string.datatype }?,
       attribute normalization-form { "NFC" | "NFD" | "NFKC" | "NFKD" | "fully-normalized" | "none" | nmtoken.datatype }?,
+      attribute parameter-document { uri.datatype }?,
       attribute omit-xml-declaration { "yes" | "no" }?,
       attribute standalone { "yes" | "no" | "omit" }?,
       attribute suppress-indentation { eqnames.datatype }?,
