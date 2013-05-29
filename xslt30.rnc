@@ -752,7 +752,7 @@ accumulator.element =
       global.atts,
       attribute name { eqname.datatype },
       attribute post-descent { eqname.datatype }?,
-      attribute initial-value { expression.datatype }?,
+      attribute initial-value { expression.datatype },
       attribute as { sequence-type.datatype }?,
       attribute visibility { "public" | "private" | "final" | "abstract" }?,
       attribute streamable { "yes" | "no" }?,
