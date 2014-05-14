@@ -80,7 +80,7 @@ anyElement =
     
 extension.atts = attribute * - (xsl:* | local:*) { text }*
 
-other-declarations.model = (declaration.category | top-level-extension)*
+declarations.model = (declaration.category | top-level-extension)*
 
 # [Definition: There are a number of standard attributes that may appear on any XSLT element: specifically 
 # default-collation, 
@@ -214,7 +214,7 @@ package.element =
       attribute expand-text { "yes" | "no" }?,
       attribute use-when { expression.datatype }?,
       attribute xpath-default-namespace { uri.datatype }?,
-      (use-package.element*, (stylesheet.element | transform.element), expose.element*)
+      ((use-package.element | expose.element | global-context-item.element | stylesheet.element | transform.element)*)
    }
 use-package.element =
    element use-package {
@@ -262,7 +262,7 @@ stylesheet.element =
       attribute expand-text { "yes" | "no" }?,
       attribute use-when { expression.datatype }?,
       attribute xpath-default-namespace { uri.datatype }?,
-      (use-package.element*, other-declarations.model)
+      (declarations.model)
    }
 transform.element =
    element transform {
@@ -278,7 +278,7 @@ transform.element =
       attribute expand-text { "yes" | "no" }?,
       attribute use-when { expression.datatype }?,
       attribute xpath-default-namespace { uri.datatype }?,
-      (use-package.element*, other-declarations.model)
+      (declarations.model)
    }
 include.element =
    element include {
@@ -325,6 +325,7 @@ decimal-format.element =
       attribute grouping-separator { char.datatype }?,
       attribute infinity { string.datatype }?,
       attribute minus-sign { char.datatype }?,
+      attribute exponent-separator { char.datatype }?,
       attribute NaN { string.datatype }?,
       attribute percent { char.datatype }?,
       attribute per-mille { char.datatype }?,
@@ -364,11 +365,18 @@ mode.element =
       attribute warning-on-no-match { "yes" | "no" }?,
       attribute warning-on-multiple-match { "yes" | "no" }?,
       attribute typed { "yes" | "no" | "strict" | "lax" | "unspecified" }?,
-      attribute visibility { "public" | "private" | "final" }?,
-      (context-item.element?)
+      attribute visibility { "public" | "private" | "final" }?
    }
 context-item.element =
    element context-item {
+      extension.atts,
+      global.atts,
+      attribute as { sequence-type.datatype }?,
+      attribute use { "required" | "optional" | "prohibited" }?,
+      empty
+   }
+global-context-item.element =
+   element global-context-item {
       extension.atts,
       global.atts,
       attribute as { sequence-type.datatype }?,
@@ -399,7 +407,7 @@ iterate.element =
       extension.atts,
       global.atts,
       attribute select { expression.datatype },
-      (param.element*, sequence-constructor.model, on-completion.element?)
+      (param.element*, on-completion.element?, sequence-constructor.model)
    }
 next-iteration.element =
    element next-iteration {
@@ -520,6 +528,7 @@ function.element =
       attribute name { eqname.datatype },
       attribute as { sequence-type.datatype }?,
       attribute visibility { "public" | "private" | "final" | "abstract" }?,
+      attribute streamable { "yes" | "no" }?,
       attribute override-extension-function { "yes" | "no" }?,
       attribute override { "yes" | "no" }?,
       attribute identity-sensitive { "yes" | "no" }?,
@@ -697,8 +706,6 @@ for-each-group.element =
       attribute group-adjacent { expression.datatype }?,
       attribute group-starting-with { pattern.datatype }?,
       attribute group-ending-with { pattern.datatype }?,
-      attribute bind-group { eqname.datatype }?,
-      attribute bind-grouping-key { eqname.datatype }?,
       attribute composite { "yes" | "no" }?,
       attribute collation { uri.datatype | avt.datatype }?,
       (sort.element*, sequence-constructor.model)
@@ -707,19 +714,20 @@ merge.element =
    element merge {
       extension.atts,
       global.atts,
-      attribute bind-group { eqname.datatype }?,
-      attribute bind-key { eqname.datatype }?,
       (merge-source.element+, merge-action.element, fallback.element*)
    }
 merge-source.element =
    element merge-source {
       extension.atts,
       global.atts,
-      attribute for-each { expression.datatype }?,
+      attribute name { ncname.datatype }?,
+      attribute for-each-item { expression.datatype }?,
+      attribute for-each-stream { expression.datatype }?,
       attribute select { expression.datatype },
-      attribute bind-source { eqname.datatype }?,
       attribute streamable { "yes" | "no" }?,
       attribute sort-before-merge { "yes" | "no" }?,
+      attribute validation { "strict" | "lax" | "preserve" | "strip" }?,
+      attribute type { eqname.datatype }?,
       merge-key.element+
    }
 merge-key.element =
