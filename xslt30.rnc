@@ -55,7 +55,7 @@ literal-result-element-no-version.atts =
    attribute * - xsl:* { avt.datatype }*
  & attribute xsl:default-collation { uris.datatype }?
  & attribute xsl:exclude-result-prefixes { exclude.prefixes.datatype }? # or prefixes.datatype ?
- & attribute xsl:expand-text { "yes" | "no" }?
+ & attribute xsl:expand-text { boolean.datatype }?
  & attribute xsl:extension-element-prefixes { extension.prefixes.datatype }? # or prefixes.datatype ?
  & attribute xsl:on-empty { expression.datatype }?
  & attribute xsl:use-attribute-sets { eqnames.datatype }?
@@ -94,7 +94,7 @@ declarations.model = (declaration.category | top-level-extension)*
 global.atts = 
    attribute default-collation { uris.datatype }?,
    attribute exclude-result-prefixes { exclude.prefixes.datatype }?, # or prefixes.datatype ?
-   attribute expand-text { "yes" | "no" }?,
+   attribute expand-text { boolean.datatype }?,
    attribute extension-element-prefixes { extension.prefixes.datatype }?, # or prefixes.datatype ?
    attribute use-when { expression.datatype }?,
    attribute version { decimal.datatype }?,
@@ -104,7 +104,7 @@ global.atts =
 global.atts.except.version = 
    attribute default-collation { uris.datatype }?,
    attribute exclude-result-prefixes { exclude.prefixes.datatype }?, # or prefixes.datatype ?
-   attribute expand-text { "yes" | "no" }?,
+   attribute expand-text { boolean.datatype }?,
    attribute extension-element-prefixes { extension.prefixes.datatype }?, # or prefixes.datatype ?
    attribute use-when { expression.datatype }?,
    attribute xpath-default-namespace { uri.datatype }?
@@ -121,6 +121,7 @@ qnames.datatype = list { qname.datatype* }
 eqnames.datatype = list { eqname.datatype* }
 ncname.datatype = xsd:NCName
 prefix.datatype = xsd:NCName
+boolean.datatype = "yes" | "no"
 expression.datatype = text
 char.datatype = xsd:string { length = "1" }
 string.datatype = text
@@ -206,12 +207,13 @@ package.element =
       attribute package-version { string.datatype }?,
       attribute version { decimal.datatype },
       attribute input-type-annotations { "preserve" | "strip" | "unspecified" }?,
+      attribute declared-modes { boolean.datatype }?,
       attribute default-mode { eqname.datatype | "#unnamed" }?,
       attribute default-validation { "preserve" | "strip" }?,
       attribute default-collation { uris.datatype }?,
       attribute extension-element-prefixes { prefixes.datatype }?,
       attribute exclude-result-prefixes { prefixes.datatype }?,
-      attribute expand-text { "yes" | "no" }?,
+      attribute expand-text { boolean.datatype }?,
       attribute use-when { expression.datatype }?,
       attribute xpath-default-namespace { uri.datatype }?,
       ((use-package.element | expose.element | global-context-item.element | stylesheet.element | transform.element)*)
@@ -259,7 +261,7 @@ stylesheet.element =
       attribute default-collation { uris.datatype }?,
       attribute extension-element-prefixes { prefixes.datatype }?,
       attribute exclude-result-prefixes { prefixes.datatype }?,
-      attribute expand-text { "yes" | "no" }?,
+      attribute expand-text { boolean.datatype }?,
       attribute use-when { expression.datatype }?,
       attribute xpath-default-namespace { uri.datatype }?,
       (declarations.model)
@@ -275,7 +277,7 @@ transform.element =
       attribute default-collation { uris.datatype }?,
       attribute extension-element-prefixes { prefixes.datatype }?,
       attribute exclude-result-prefixes { prefixes.datatype }?,
-      attribute expand-text { "yes" | "no" }?,
+      attribute expand-text { boolean.datatype }?,
       attribute use-when { expression.datatype }?,
       attribute xpath-default-namespace { uri.datatype }?,
       (declarations.model)
@@ -359,12 +361,12 @@ mode.element =
       extension.atts,
       global.atts,
       attribute name { eqname.datatype }?,
-      attribute streamable { "yes" | "no" }?,
+      attribute streamable { boolean.datatype }?,
       attribute on-no-match { "deep-copy" | "shallow-copy" | "deep-skip" | "shallow-skip" | "text-only-copy" | "fail" }?,
       attribute on-multiple-match { "use-last" | "fail" }?,
-      attribute warning-on-no-match { "yes" | "no" }?,
-      attribute warning-on-multiple-match { "yes" | "no" }?,
-      attribute typed { "yes" | "no" | "strict" | "lax" | "unspecified" }?,
+      attribute warning-on-no-match { boolean.datatype }?,
+      attribute warning-on-multiple-match { boolean.datatype }?,
+      attribute typed { boolean.datatype | "strict" | "lax" | "unspecified" }?,
       attribute visibility { "public" | "private" | "final" }?
    }
 context-item.element =
@@ -477,7 +479,7 @@ variable.element =
       attribute name { eqname.datatype },
       attribute select { expression.datatype }?,
       attribute as { sequence-type.datatype }?,
-      attribute static { "yes" | "no" }?,
+      attribute static { boolean.datatype }?,
       attribute visibility { "public" | "private" | "final" | "abstract" }?,
       sequence-constructor.model
    }
@@ -488,9 +490,9 @@ param.element =
       attribute name { eqname.datatype },
       attribute select { expression.datatype }?,
       attribute as { sequence-type.datatype }?,
-      attribute required { "yes" | "no" }?,
-      attribute tunnel { "yes" | "no" }?,
-      attribute static { "yes" | "no" }?,
+      attribute required { boolean.datatype }?,
+      attribute tunnel { boolean.datatype }?,
+      attribute static { boolean.datatype }?,
       attribute visibility { "public" | "private" | "final" | "abstract" }?,
       sequence-constructor.model
    }
@@ -501,7 +503,7 @@ with-param.element =
       attribute name { eqname.datatype },
       attribute select { expression.datatype }?,
       attribute as { sequence-type.datatype }?,
-      attribute tunnel { "yes" | "no" }?,
+      attribute tunnel { boolean.datatype }?,
       sequence-constructor.model
    }
 call-template.element =
@@ -518,7 +520,7 @@ attribute-set.element =
       attribute name { eqname.datatype },
       attribute use-attribute-sets { eqnames.datatype }?,
       attribute visibility { "public" | "private" | "final" | "abstract" }?,
-      attribute streamable { "yes" | "no" }?,
+      attribute streamable { boolean.datatype }?,
       attribute.element*
    }
 function.element =
@@ -528,10 +530,10 @@ function.element =
       attribute name { eqname.datatype },
       attribute as { sequence-type.datatype }?,
       attribute visibility { "public" | "private" | "final" | "abstract" }?,
-      attribute streamable { "yes" | "no" }?,
-      attribute override-extension-function { "yes" | "no" }?,
-      attribute override { "yes" | "no" }?,
-      attribute identity-sensitive { "yes" | "no" }?,
+      attribute streamable { boolean.datatype }?,
+      attribute override-extension-function { boolean.datatype }?,
+      attribute override { boolean.datatype }?,
+      attribute identity-sensitive { boolean.datatype }?,
       attribute cache { "full" | "partial" | "no" }?,
       (param.element*, sequence-constructor.model)
    }
@@ -545,7 +547,7 @@ evaluate.element =
       attribute with-params { expression.datatype }?,
       attribute context-item { expression.datatype }?,
       attribute namespace-context { expression.datatype }?,
-      attribute schema-aware { "yes" | "no" | avt.datatype }?,
+      attribute schema-aware { boolean.datatype | avt.datatype }?,
       (with-param.element | fallback.element)*
    }
 namespace-alias.element =
@@ -562,7 +564,7 @@ element.element =
       global.atts,
       attribute name { qname.datatype | avt.datatype },
       attribute namespace { uri.datatype | avt.datatype }?,
-      attribute inherit-namespaces { "yes" | "no" }?,
+      attribute inherit-namespaces { boolean.datatype }?,
       attribute use-attribute-sets { eqnames.datatype }?,
       attribute type { eqname.datatype }?,
       attribute validation { "strict" | "lax" | "preserve" | "strip" }?,
@@ -579,14 +581,13 @@ attribute.element =
       attribute separator { string.datatype | avt.datatype }?,
       attribute type { eqname.datatype }?,
       attribute validation { "strict" | "lax" | "preserve" | "strip" }?,
-      attribute on-empty { expression.datatype }?,
       sequence-constructor.model
    }
 text.element =
    element text {
       extension.atts,
       global.atts,
-      attribute disable-output-escaping { "yes" | "no" }?,
+      attribute disable-output-escaping { boolean.datatype }?,
       text
    }
 value-of.element =
@@ -595,7 +596,7 @@ value-of.element =
       global.atts,
       attribute select { expression.datatype }?,
       attribute separator { string.datatype | avt.datatype }?,
-      attribute disable-output-escaping { "yes" | "no" }?,
+      attribute disable-output-escaping { boolean.datatype }?,
       sequence-constructor.model
    }
 document.element =
@@ -634,8 +635,8 @@ copy.element =
       extension.atts,
       global.atts,
       attribute select { expression.datatype }?,
-      attribute copy-namespaces { "yes" | "no" }?,
-      attribute inherit-namespaces { "yes" | "no" }?,
+      attribute copy-namespaces { boolean.datatype }?,
+      attribute inherit-namespaces { boolean.datatype }?,
       attribute use-attribute-sets { eqnames.datatype }?,
       attribute type { eqname.datatype }?,
       attribute validation { "strict" | "lax" | "preserve" | "strip" }?,
@@ -647,7 +648,7 @@ copy-of.element =
       extension.atts,
       global.atts,
       attribute select { expression.datatype },
-      attribute copy-namespaces { "yes" | "no" }?,
+      attribute copy-namespaces { boolean.datatype }?,
       attribute type { eqname.datatype }?,
       attribute validation { "strict" | "lax" | "preserve" | "strip" }?,
       empty
@@ -685,7 +686,7 @@ sort.element =
       attribute lang { language.datatype | avt.datatype }?,
       attribute order { "ascending" | "descending" | avt.datatype }?,
       attribute collation { uri.datatype | avt.datatype }?,
-      attribute stable { "yes" | "no" | avt.datatype }?,
+      attribute stable { boolean.datatype | avt.datatype }?,
       attribute case-order { "upper-first" | "lower-first" | avt.datatype }?,
       attribute data-type { "text" | "number" | eqname.datatype | avt.datatype }?,
       sequence-constructor.model
@@ -706,7 +707,7 @@ for-each-group.element =
       attribute group-adjacent { expression.datatype }?,
       attribute group-starting-with { pattern.datatype }?,
       attribute group-ending-with { pattern.datatype }?,
-      attribute composite { "yes" | "no" }?,
+      attribute composite { boolean.datatype }?,
       attribute collation { uri.datatype | avt.datatype }?,
       (sort.element*, sequence-constructor.model)
    }
@@ -724,8 +725,8 @@ merge-source.element =
       attribute for-each-item { expression.datatype }?,
       attribute for-each-stream { expression.datatype }?,
       attribute select { expression.datatype },
-      attribute streamable { "yes" | "no" }?,
-      attribute sort-before-merge { "yes" | "no" }?,
+      attribute streamable { boolean.datatype }?,
+      attribute sort-before-merge { boolean.datatype }?,
       attribute validation { "strict" | "lax" | "preserve" | "strip" }?,
       attribute type { eqname.datatype }?,
       merge-key.element+
@@ -752,7 +753,7 @@ fork.element =
    element fork {
       extension.atts,
       global.atts,
-      ((sequence.element | fallback.element))+
+      (fallback.element*, ((sequence.element, fallback.element*)* | (for-each-group.element, fallback.element*)))
    }
 analyze-string.element =
    element analyze-string {
@@ -789,10 +790,11 @@ accumulator.element =
       extension.atts,
       global.atts,
       attribute name { eqname.datatype },
+      attribute applies-to { pattern.datatype }?,
       attribute initial-value { expression.datatype },
       attribute as { sequence-type.datatype }?,
       attribute visibility { "public" | "private" | "final" | "abstract" }?,
-      attribute streamable { "yes" | "no" }?,
+      attribute streamable { boolean.datatype }?,
       accumulator-rule.element+
    }
 accumulator-rule.element =
@@ -811,7 +813,7 @@ key.element =
       attribute name { eqname.datatype },
       attribute match { pattern.datatype },
       attribute use { expression.datatype }?,
-      attribute composite { "yes" | "no" }?,
+      attribute composite { boolean.datatype }?,
       attribute collation { uri.datatype }?,
       sequence-constructor.model
    }
@@ -834,7 +836,7 @@ message.element =
       extension.atts,
       global.atts,
       attribute select { expression.datatype }?,
-      attribute terminate { "yes" | "no" | avt.datatype }?,
+      attribute terminate { boolean.datatype | avt.datatype }?,
       attribute error-code { eqname.datatype | avt.datatype }?,
       sequence-constructor.model
    }
@@ -862,23 +864,23 @@ result-document.element =
       attribute validation { "strict" | "lax" | "preserve" | "strip" }?,
       attribute type { eqname.datatype }?,
       attribute method { "xml" | "html" | "xhtml" | "text" | eqname.datatype | avt.datatype }?,
-      attribute byte-order-mark { "yes" | "no" | avt.datatype }?,
+      attribute byte-order-mark { boolean.datatype | avt.datatype }?,
       attribute cdata-section-elements { eqnames.datatype | avt.datatype }?,
       attribute doctype-public { string.datatype | avt.datatype }?,
       attribute doctype-system { string.datatype | avt.datatype }?,
       attribute encoding { string.datatype | avt.datatype }?,
-      attribute escape-uri-attributes { "yes" | "no" | avt.datatype }?,
+      attribute escape-uri-attributes { boolean.datatype | avt.datatype }?,
       attribute html-version { decimal.datatype | avt.datatype }?,
-      attribute include-content-type { "yes" | "no" | avt.datatype }?,
-      attribute indent { "yes" | "no" | avt.datatype }?,
+      attribute include-content-type { boolean.datatype | avt.datatype }?,
+      attribute indent { boolean.datatype | avt.datatype }?,
       attribute item-separator { string.datatype | avt.datatype }?,
       attribute media-type { string.datatype | avt.datatype }?,
       attribute normalization-form { "NFC" | "NFD" | "NFKC" | "NFKD" | "fully-normalized" | "none" | nmtoken.datatype | avt.datatype }?,
-      attribute omit-xml-declaration { "yes" | "no" | avt.datatype }?,
+      attribute omit-xml-declaration { boolean.datatype | avt.datatype }?,
       attribute parameter-document { uri.datatype | avt.datatype }?,
-      attribute standalone { "yes" | "no" | "omit" | avt.datatype }?,
+      attribute standalone { boolean.datatype | "omit" | avt.datatype }?,
       attribute suppress-indentation { eqnames.datatype | avt.datatype }?,
-      attribute undeclare-prefixes { "yes" | "no" | avt.datatype }?,
+      attribute undeclare-prefixes { boolean.datatype | avt.datatype }?,
       attribute use-character-maps { eqnames.datatype }?,
       attribute output-version { nmtoken.datatype | avt.datatype }?,
       sequence-constructor.model
@@ -889,23 +891,23 @@ output.element =
       global.atts.except.version,
       attribute name { eqname.datatype }?,
       attribute method { "xml" | "html" | "xhtml" | "text" | eqname.datatype }?,
-      attribute byte-order-mark { "yes" | "no" }?,
+      attribute byte-order-mark { boolean.datatype }?,
       attribute cdata-section-elements { eqnames.datatype }?,
       attribute doctype-public { string.datatype }?,
       attribute doctype-system { string.datatype }?,
       attribute encoding { string.datatype }?,
-      attribute escape-uri-attributes { "yes" | "no" }?,
+      attribute escape-uri-attributes { boolean.datatype }?,
       attribute html-version { decimal.datatype }?,
-      attribute include-content-type { "yes" | "no" }?,
-      attribute indent { "yes" | "no" }?,
+      attribute include-content-type { boolean.datatype }?,
+      attribute indent { boolean.datatype }?,
       attribute item-separator { string.datatype }?,
       attribute media-type { string.datatype }?,
       attribute normalization-form { "NFC" | "NFD" | "NFKC" | "NFKD" | "fully-normalized" | "none" | nmtoken.datatype }?,
-      attribute omit-xml-declaration { "yes" | "no" }?,
+      attribute omit-xml-declaration { boolean.datatype }?,
       attribute parameter-document { uri.datatype }?,
-      attribute standalone { "yes" | "no" | "omit" }?,
+      attribute standalone { boolean.datatype | "omit" }?,
       attribute suppress-indentation { eqnames.datatype }?,
-      attribute undeclare-prefixes { "yes" | "no" }?,
+      attribute undeclare-prefixes { boolean.datatype }?,
       attribute use-character-maps { eqnames.datatype }?,
       attribute version { nmtoken.datatype }?,
       empty
