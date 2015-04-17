@@ -207,7 +207,7 @@ instruction.category =
 package.element =
    element package {
       extension.atts,
-      global.atts,
+#      global.atts,
       attribute name { uri.datatype }?,
       attribute package-version { string.datatype }?,
       attribute version { decimal.datatype },
