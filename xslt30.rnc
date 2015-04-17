@@ -21,6 +21,7 @@ namespace xs = "http://www.w3.org/2001/XMLSchema"
 start =
   stylesheet.element
   | transform.element
+  | package.element  
   | literal-result-element-as-stylesheet
   
 sequence-constructor.model = (instruction.category | literal-result-element | text)*
