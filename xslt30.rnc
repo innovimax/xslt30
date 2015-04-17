@@ -45,16 +45,20 @@ literal-result-element.atts =
 
 # These attributes may also appear on a literal result element, but in this case, to distinguish them from user-defined attributes, 
 # the names of the attributes are in the XSLT namespace. They are thus typically written as 
-# xsl:default-collation, 
-# xsl:exclude-result-prefixes, 
-# xsl:expand-text, 
-# xsl:extension-element-prefixes, 
-# xsl:use-when, 
-# xsl:version, 
-# or xsl:xpath-default-namespace.   
+# xsl:default-collation,
+# xsl:default-mode,
+# xsl:default-validation,
+# xsl:exclude-result-prefixes,
+# xsl:expand-text,
+# xsl:extension-element-prefixes,
+# xsl:use-when,
+# xsl:version,
+# or xsl:xpath-default-namespace.
 literal-result-element-no-version.atts =
    attribute * - xsl:* { avt.datatype }*
  & attribute xsl:default-collation { uris.datatype }?
+ & attribute xsl:default-mode { eqname.datatype | '#unnamed' }?
+ & attribute xsl:default-validation  { "preserve" | "strip" }?
  & attribute xsl:exclude-result-prefixes { exclude.prefixes.datatype }? # or prefixes.datatype ?
  & attribute xsl:expand-text { boolean.datatype }?
  & attribute xsl:extension-element-prefixes { extension.prefixes.datatype }? # or prefixes.datatype ?
