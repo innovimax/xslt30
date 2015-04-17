@@ -85,7 +85,9 @@ declarations.model = (declaration.category | top-level-extension)*
 
 # [Definition: There are a number of standard attributes that may appear on any XSLT element: specifically 
 # default-collation, 
-# exclude-result-prefixes,
+# default-mode, 
+# default-validation, 
+# exclude-result-prefixes, 
 # expand-text, 
 # extension-element-prefixes, 
 # use-when, 
@@ -95,6 +97,10 @@ declarations.model = (declaration.category | top-level-extension)*
 global.atts = 
    (attribute default-collation { uris.datatype }
    |attribute _default-collation { avt.datatype })?,
+   (attribute default-mode { eqname.datatype | '#unnamed' }
+   |attribute _default-mode { avt.datatype })?,
+   (attribute default-validation  { "preserve" | "strip" }
+   |attribute _default-validation { avt.datatype })?,   
    (attribute exclude-result-prefixes { exclude.prefixes.datatype }
    |attribute _exclude-result-prefixes { avt.datatype })?, # or prefixes.datatype ?
    (attribute expand-text { boolean.datatype }
