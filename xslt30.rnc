@@ -62,12 +62,14 @@ literal-result-element-no-version.atts =
  & attribute xsl:exclude-result-prefixes { exclude.prefixes.datatype }? # or prefixes.datatype ?
  & attribute xsl:expand-text { boolean.datatype }?
  & attribute xsl:extension-element-prefixes { extension.prefixes.datatype }? # or prefixes.datatype ?
+ & attribute xsl:inherit-namespaces { boolean.datatype }?
  & attribute xsl:on-empty { expression.datatype }?
  & attribute xsl:use-attribute-sets { eqnames.datatype }?
  & attribute xsl:use-when { expression.datatype }?
  & attribute xsl:xpath-default-namespace { xsd:anyURI }?
  & (attribute xsl:type { eqname.datatype }
-    | attribute xsl:validation { "strict" | "lax" | "preserve" | "strip" })?
+    | attribute xsl:validation { "preserve" | "strip" })?
+
 
 top-level-extension =
   element * - (xsl:* | local:*) {
