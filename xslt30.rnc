@@ -145,7 +145,7 @@ qnames.datatype = list { qname.datatype* }
 eqnames.datatype = list { eqname.datatype* }
 ncname.datatype = xsd:NCName
 prefix.datatype = xsd:NCName
-boolean.datatype = "yes" | "no" | "true" | "false"
+boolean.datatype = "yes" | "no" | "true" | "false" | "0" | "1" 
 expression.datatype = text
 char.datatype = xsd:string { length = "1" }
 string.datatype = text
