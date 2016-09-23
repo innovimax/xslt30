@@ -224,7 +224,7 @@ instruction.category =
  | merge.element
  | fork.element
  | analyze-string.element
- | stream.element
+ | source-document.element
  | map.element
  | map-entry.element
  | message.element
@@ -466,6 +466,8 @@ mode.element =
       | attribute _name { avt.datatype })?,
       (attribute streamable { boolean.datatype }
       | attribute _streamable { avt.datatype })?,
+      (attribute use-accumulators { tokens.datatype }
+      | attribute _use-accumulators { avt.datatype })?,
       (attribute on-no-match { "deep-copy" | "shallow-copy" | "deep-skip" | "shallow-skip" | "text-only-copy" | "fail" }
       | attribute _on-no-match { avt.datatype })?,
       (attribute on-multiple-match { "use-last" | "fail" }
@@ -970,8 +972,8 @@ merge-source.element =
       | attribute _name { avt.datatype })?,
       (attribute for-each-item { expression.datatype }
       | attribute _for-each-item { avt.datatype })?,
-      (attribute for-each-stream { expression.datatype }
-      | attribute _for-each-stream { avt.datatype })?,
+      (attribute for-each-source { expression.datatype }
+      | attribute _for-each-source { avt.datatype })?,
       (attribute select { expression.datatype }
       | attribute _select { avt.datatype }),
       (attribute streamable { boolean.datatype }
@@ -1040,12 +1042,14 @@ non-matching-substring.element =
       global.atts,
       sequence-constructor.model
    }
-stream.element =
-   element stream {
+source-document.element =
+   element source-document {
       extension.atts,
       global.atts,
       (attribute href { uri.datatype | avt.datatype }
       | attribute _href { avt.datatype }),
+      (attribute streamable { boolean.datatype }
+      | attribute _streamable { avt.datatype })?,
       (attribute use-accumulators { tokens.datatype }
       | attribute _use-accumulators { avt.datatype })?,
       (attribute validation { "strict" | "lax" | "preserve" | "strip" }
