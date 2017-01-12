@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0">
-  <!-- (c) Innovimax 2011-2012 - XSLT 3.0 Quine without DOE -->
+  <!-- (c) Innovimax 2011-2017 - XSLT 3.0 Quine without DOE -->
   <xsl:variable name="code">
     <xsl:element name="xsl:stylesheet">
       <xsl:attribute name="version" select="'3.0'"/>
-      <xsl:comment> (c) Innovimax 2011-2012 - XSLT 3.0 Quine without DOE </xsl:comment>
+      <xsl:comment> (c) Innovimax 2011-2017 - XSLT 3.0 Quine without DOE </xsl:comment>
       <xsl:element name="xsl:variable">
         <xsl:attribute name="name" select="'code'"/>
         <xsl:element name="foo"/>
